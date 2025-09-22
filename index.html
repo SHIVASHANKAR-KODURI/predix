@@ -52,7 +52,7 @@
             min-height: 100vh;
         }
         .img-logo {
-            width: 300px; /* Decreased size */
+            max-width: 300px;
             height: auto;
             margin-bottom: 2.5rem;
             padding-top: 1.5rem;
@@ -117,29 +117,25 @@
             }
             .main-content {
                 margin-left: 5rem;
-                padding-left: 1rem; /* Adjust padding for small screens */
+                padding-left: 1rem;
                 padding-right: 1rem;
             }
             .img-logo {
-                width: 80%; /* Smaller logo on mobile */
-                padding-bottom: 1.5rem;
+                width: 80%;
+                margin-bottom: 1.5rem;
                 padding-top: 1rem;
-            }
-            .sidebar-logo-text {
-                display: none;
             }
             .card-grid {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
             }
             .prediction-card {
-                padding: 1.5rem; /* Adjust card padding for mobile */
+                padding: 1.5rem;
                 font-size: 1rem;
             }
         }
     </style>
 </head>
 <body class="flex">
-    <!-- Sidebar -->
     <aside class="sidebar">
         <a href="index.html" class="sidebar-icon">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -148,11 +144,9 @@
         </a>
     </aside>
 
-    <!-- Main Content Area -->
     <div class="main-content">
         <img src="logo.png" alt="Logo" class="img-logo">
         
-        <!-- Prediction Cards Grid -->
         <div id="card-selection" class="card-grid">
             <a href="diabetes_form.html" class="prediction-card color-1">
                 DIABETES PREDICTION
