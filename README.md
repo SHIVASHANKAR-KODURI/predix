@@ -1,4 +1,6 @@
 ### **Predix**
+[predix007.netlify.app/](https://predix007.netlify.app/)
+
 
 This is a web-based system that uses machine learning models to predict the likelihood of various diseases based on user-provided health data. The project features a clean, responsive user interface and a Python-Flask backend that serves the prediction models.
 
@@ -142,3 +144,4 @@ The frontend can be deployed to a static hosting service like Netlify. The backe
 ### **Contributing**
 
 Feel free to fork the repository, make improvements, and submit a pull request\!
+
