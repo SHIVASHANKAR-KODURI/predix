@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Disease Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #f3f4f6; /* Fallback color */
+        }
+        .sidebar {
+            background-color: #2c3e50; /* Fallback color */
+            background-image: url('headerimage.jpg'); /* Your background image */
+            background-size: cover; /* Cover the entire area */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Do not repeat the image */
+            width: 15rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 2rem;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        .sidebar-icon {
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .sidebar-icon:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .main-content {
+            margin-left: 15rem;
+            flex-grow: 1;
+            padding: 2.5rem; /* Base padding */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            min-height: 100vh;
+        }
+        .img-logo {
+            width: 300px; /* Decreased size */
+            height: auto;
+            margin-bottom: 2.5rem;
+            padding-top: 1.5rem;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 60rem;
+        }
+        .prediction-card {
+            color: rgb(56, 97, 126);
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            backdrop-filter: blur(1.5px);
+            background-color: rgba(255, 255, 255, 0);
+            border: 7px solid rgb(200, 236, 255);
+            text-shadow: 1px 1px 2px rgba(11, 4, 45, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-wrap: balance;
+        }
+        .prediction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        /* Custom colors for the cards */
+        .color-1 { background-color: rgb(203, 244, 255,0.3); }
+        .color-2 { background-color: rgb(203, 244, 255,0.3); }
+        .color-3 { background-color: rgba(203, 244,255,0.3); }
+        .color-4 { background-color: rgb(203, 244, 255,0.3); }
+        .color-5 { background-color: rgb(203, 244, 255,0.3); }
+        .color-6 { background-color: rgb(203, 244, 255,0.3); }
+        
+        .message-box {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+        .message-box.success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .message-box.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 5rem;
+            }
+            .main-content {
+                margin-left: 5rem;
+                padding-left: 1rem; /* Adjust padding for small screens */
+                padding-right: 1rem;
+            }
+            .img-logo {
+                width: 80%; /* Smaller logo on mobile */
+                padding-bottom: 1.5rem;
+                padding-top: 1rem;
+            }
+            .sidebar-logo-text {
+                display: none;
+            }
+            .card-grid {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .prediction-card {
+                padding: 1.5rem; /* Adjust card padding for mobile */
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="flex">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/>
+            </svg>
+        </a>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <img src="logo.png" alt="Logo" class="img-logo">
+        
+        <!-- Prediction Cards Grid -->
+        <div id="card-selection" class="card-grid">
+            <a href="diabetes_form.html" class="prediction-card color-1">
+                DIABETES PREDICTION
+            </a>
+            <a href="heartdisease_form.html" class="prediction-card color-2">
+                HEART DISEASE PREDICTION
+            </a>
+            <a href="ckd_form.html" class="prediction-card color-3">
+                CHRONIC KIDNEY DISEASE PREDICTION
+            </a>
+            <a href="breastcancer_form.html" class="prediction-card color-4">
+                BREAST CANCER PREDICTION
+            </a>
+            <a href="parkinsons_form.html" class="prediction-card color-5">
+                PARKINSON'S DISEASE PREDICTION
+            </a>
+            <a href="liver_form.html" class="prediction-card color-6">
+                LIVER DISEASE PREDICTION
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkinson's Prediction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            background-image: url('bg2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .sidebar {
+            background-color: #2c3e50;
+            background-image: url('sideimg.jpg');
+            background-size: cover; /* Cover the entire area */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat;
+            width: 15rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 2rem;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        .sidebar-icon {
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .sidebar-icon:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .main-content {
+            margin-left: 15rem;
+            flex-grow: 1;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-container {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 40rem;
+        }
+        .message-box {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+        .message-box.success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .message-box.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 5rem;
+            }
+            .main-content {
+                margin-left: 5rem;
+            }
+        }
+    </style>
+</head>
+<body class="flex">
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/>
+            </svg>
+        </a>
+    </aside>
+
+    <div class="main-content">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">PARKINSON'S PREDICTION</h1>
+        
+        <div id="form-container" class="form-container">
+            <h2 id="form-title" class="text-2xl font-bold mb-4 text-center">Enter Biomedical Voice Measurements</h2>
+            <div id="form-fields" class="space-y-4">
+                <div>
+                    <label for="MDVP:Fo(Hz)" class="block text-sm font-medium text-gray-700">MDVP:Fo(Hz) - Average vocal fundamental frequency</label>
+                    <input type="number" step="any" id="MDVP:Fo(Hz)" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 119.929">
+                </div>
+                <div>
+                    <label for="MDVP:Fhi(Hz)" class="block text-sm font-medium text-gray-700">MDVP:Fhi(Hz) - Maximum vocal fundamental frequency</label>
+                    <input type="number" step="any" id="MDVP:Fhi(Hz)" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 157.302">
+                </div>
+                <div>
+                    <label for="MDVP:Flo(Hz)" class="block text-sm font-medium text-gray-700">MDVP:Flo(Hz) - Minimum vocal fundamental frequency</label>
+                    <input type="number" step="any" id="MDVP:Flo(Hz)" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 74.526">
+                </div>
+                <div>
+                    <label for="MDVP:Jitter(%)" class="block text-sm font-medium text-gray-700">MDVP:Jitter(%) - Jitter (in %) of fundamental frequency</label>
+                    <input type="number" step="any" id="MDVP:Jitter(%)" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.00784">
+                </div>
+                <div>
+                    <label for="MDVP:Jitter(Abs)" class="block text-sm font-medium text-gray-700">MDVP:Jitter(Abs) - Jitter (in absolute value) of fundamental frequency</label>
+                    <input type="number" step="any" id="MDVP:Jitter(Abs)" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.00007">
+                </div>
+                <div>
+                    <label for="MDVP:Rap" class="block text-sm font-medium text-gray-700">MDVP:Rap - Relative Average Perturbation</label>
+                    <input type="number" step="any" id="MDVP:Rap" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.0037">
+                </div>
+                <div>
+                    <label for="MDVP:PPQ" class="block text-sm font-medium text-gray-700">MDVP:PPQ - Five-point Period Perturbation Quotient</label>
+                    <input type="number" step="any" id="MDVP:PPQ" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.00554">
+                </div>
+                <div>
+                    <label for="Jitter:DDP" class="block text-sm font-medium text-gray-700">Jitter:DDP - Three-point DDP of fundamental frequency</label>
+                    <input type="number" step="any" id="Jitter:DDP" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.01109">
+                </div>
+                <div>
+                    <label for="MDVP:Shimmer" class="block text-sm font-medium text-gray-700">MDVP:Shimmer - Shimmer of fundamental frequency</label>
+                    <input type="number" step="any" id="MDVP:Shimmer" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.01938">
+                </div>
+                <div>
+                    <label for="MDVP:Shimmer(dB)" class="block text-sm font-medium text-gray-700">MDVP:Shimmer(dB) - Shimmer of fundamental frequency (in dB)</label>
+                    <input type="number" step="any" id="MDVP:Shimmer(dB)" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.181">
+                </div>
+                <div>
+                    <label for="Shimmer:APQ3" class="block text-sm font-medium text-gray-700">Shimmer:APQ3 - Three-point APQ</label>
+                    <input type="number" step="any" id="Shimmer:APQ3" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.01422">
+                </div>
+                <div>
+                    <label for="Shimmer:APQ5" class="block text-sm font-medium text-gray-700">Shimmer:APQ5 - Five-point APQ</label>
+                    <input type="number" step="any" id="Shimmer:APQ5" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.01882">
+                </div>
+                <div>
+                    <label for="MDVP:APQ" class="block text-sm font-medium text-gray-700">MDVP:APQ - Aperiodicity Perturbation Quotient</label>
+                    <input type="number" step="any" id="MDVP:APQ" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.03375">
+                </div>
+                <div>
+                    <label for="Shimmer:DDA" class="block text-sm font-medium text-gray-700">Shimmer:DDA - Three-point DDA</label>
+                    <input type="number" step="any" id="Shimmer:DDA" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.04267">
+                </div>
+                <div>
+                    <label for="NHR" class="block text-sm font-medium text-gray-700">NHR - Noise-to-Harmonics Ratio</label>
+                    <input type="number" step="any" id="NHR" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.01657">
+                </div>
+                <div>
+                    <label for="HNR" class="block text-sm font-medium text-gray-700">HNR - Harmonics-to-Noise Ratio</label>
+                    <input type="number" step="any" id="HNR" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 20.31">
+                </div>
+                <div>
+                    <label for="RPDE" class="block text-sm font-medium text-gray-700">RPDE - Recurrence Period Density Entropy</label>
+                    <input type="number" step="any" id="RPDE" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.65457">
+                </div>
+                <div>
+                    <label for="DFA" class="block text-sm font-medium text-gray-700">DFA - Detrended Fluctuation Analysis</label>
+                    <input type="number" step="any" id="DFA" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.7601">
+                </div>
+                <div>
+                    <label for="spread1" class="block text-sm font-medium text-gray-700">spread1 - Nonlinear measure of fundamental frequency variation</label>
+                    <input type="number" step="any" id="spread1" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., -4.249">
+                </div>
+                <div>
+                    <label for="spread2" class="block text-sm font-medium text-gray-700">spread2 - Nonlinear measure of fundamental frequency variation</label>
+                    <input type="number" step="any" id="spread2" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.613">
+                </div>
+                <div>
+                    <label for="D2" class="block text-sm font-medium text-gray-700">D2 - Nonlinear measure of fundamental frequency variation</label>
+                    <input type="number" step="any" id="D2" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 2.303">
+                </div>
+                <div>
+                    <label for="PPE" class="block text-sm font-medium text-gray-700">PPE - Pitch Perturbation Entropy</label>
+                    <input type="number" step="any" id="PPE" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.1895">
+                </div>
+            </div>
+            <button onclick="predictParkinsons()" class="w-full mt-6 py-3 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                Predict
+            </button>
+            <div id="prediction-result" class="message-box"></div>
+            
+            <div id="chart-container" class="hidden mt-8 w-full mx-auto" style="height: 300px;">
+                <h3 class="text-xl font-semibold mb-4 text-center">Feature Importance</h3>
+                <canvas id="importanceChart"></canvas>
+            </div>
+            
+            <button onclick="window.location.href = 'index.html'" class="w-full mt-8 py-2 px-4 text-gray-600 font-semibold rounded-md hover:text-blue-500 transition-colors duration-200 focus:outline-none">
+                &larr; Back to Selection
+            </button>
+        </div>
+    </div>
+    <script>
+        let myChart = null;
+        
+        async function predictParkinsons() {
+            const resultBox = document.getElementById('prediction-result');
+            resultBox.style.display = 'none';
+            document.getElementById('chart-container').classList.add('hidden');
+
+            const featureNames = [
+                'MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)', 'MDVP:Jitter(%)', 'MDVP:Jitter(Abs)',
+                'MDVP:Rap', 'MDVP:PPQ', 'Jitter:DDP', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)',
+                'Shimmer:APQ3', 'Shimmer:APQ5', 'MDVP:APQ', 'Shimmer:DDA', 'NHR', 'HNR',
+                'RPDE', 'DFA', 'spread1', 'spread2', 'D2', 'PPE'
+            ];
+            
+            const data = {};
+            for (const feature of featureNames) {
+                const value = document.getElementById(feature).value;
+                if (value === '') {
+                    showMessage(resultBox, `Please fill in all fields. Missing: ${feature}`, 'error');
+                    return;
+                }
+                data[feature] = parseFloat(value);
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/predict_parkinsons', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    if (result.prediction === 1) {
+                        showMessage(resultBox, 'Prediction: High chance of Parkinson\'s Disease.', 'error');
+                    } else {
+                        showMessage(resultBox, 'Prediction: Low chance of Parkinson\'s Disease.', 'success');
+                    }
+                    renderChart(result.feature_names, result.feature_importances);
+                } else {
+                    showMessage(resultBox, `Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage(resultBox, `An error occurred: ${error.message}`, 'error');
+            }
+        }
+
+        function showMessage(element, message, type) {
+            element.textContent = message;
+            element.className = `message-box ${type} block`;
+            element.style.display = 'block';
+        }
+
+        function renderChart(labels, data) {
+            document.getElementById('chart-container').classList.remove('hidden');
+            const ctx = document.getElementById('importanceChart').getContext('2d');
+            
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Feature Importance',
+                        data: data,
+                        backgroundColor: (context) => {
+                            const chart = context.chart;
+                            const { ctx, chartArea } = chart;
+                            if (!chartArea) {
+                                return;
+                            }
+                            const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                            gradient.addColorStop(0, '#3B82F6');
+                            gradient.addColorStop(1, '#6EE7B7');
+                            return gradient;
+                        },
+                        borderColor: '#1D4ED8',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Importance'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Features'
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

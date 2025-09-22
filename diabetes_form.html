@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Chart.js library for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            background-image: url('bg2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .sidebar {
+            background-color: #2c3e50;
+            background-image: url('sideimg.jpg');
+            background-size: cover; /* Cover the entire area */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat;
+            width: 15rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 2rem;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        .sidebar-icon {
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .sidebar-icon:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .main-content {
+            margin-left: 15rem;
+            flex-grow: 1;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-container {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 40rem;
+        }
+        .message-box {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+        .message-box.success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .message-box.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 5rem;
+            }
+            .main-content {
+                margin-left: 5rem;
+            }
+        }
+    </style>
+</head>
+<body class="flex">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/>
+            </svg>
+        </a>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">DIABETES PREDICTION</h1>
+        
+        <div id="form-container" class="form-container">
+            <h2 id="form-title" class="text-2xl font-bold mb-4 text-center">Enter Patient Information</h2>
+            <div id="form-fields" class="space-y-4">
+                <div>
+                    <label for="pregnancies" class="block text-sm font-medium text-gray-700">Pregnancies</label>
+                    <input type="number" id="pregnancies" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200" placeholder="Number of pregnancies">
+                </div>
+                <div>
+                    <label for="glucose" class="block text-sm font-medium text-gray-700">Glucose</label>
+                    <input type="number" id="glucose" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200" placeholder="Glucose level (mg/dL)">
+                </div>
+                <div>
+                    <label for="bp" class="block text-sm font-medium text-gray-700">Blood Pressure</label>
+                    <input type="number" id="bp" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200" placeholder="Blood pressure (mm Hg)">
+                </div>
+                <div>
+                    <label for="skinthickness" class="block text-sm font-medium text-gray-700">Skin Thickness</label>
+                    <input type="number" id="skinthickness" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200" placeholder="Skin thickness (mm)">
+                </div>
+                <div>
+                    <label for="insulin" class="block text-sm font-medium text-gray-700">Insulin</label>
+                    <input type="number" id="insulin" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200" placeholder="Insulin (mu U/ml)">
+                </div>
+                <div>
+                    <label for="bmi" class="block text-sm font-medium text-gray-700">BMI</label>
+                    <input type="number" step="0.1" id="bmi" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200" placeholder="Body Mass Index">
+                </div>
+                <div>
+                    <label for="dpf" class="block text-sm font-medium text-gray-700">Diabetes Pedigree Function</label>
+                    <input type="number" step="0.001" id="dpf" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200" placeholder="Diabetes Pedigree Function">
+                </div>
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
+                    <input type="number" id="age" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200" placeholder="Patient's age">
+                </div>
+            </div>
+            <button onclick="predictDiabetes()" class="w-full mt-6 py-3 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Predict
+            </button>
+            <div id="prediction-result" class="message-box"></div>
+            
+            <!-- New section for chart -->
+            <div id="chart-container" class="hidden mt-8 w-full mx-auto" style="height: 300px;">
+                <h3 class="text-xl font-semibold mb-4 text-center">Feature Importance</h3>
+                <canvas id="importanceChart"></canvas>
+            </div>
+            
+            <button onclick="window.location.href = 'index.html'" class="w-full mt-8 py-2 px-4 text-gray-600 font-semibold rounded-md hover:text-blue-500 transition-colors duration-200 focus:outline-none">
+                &larr; Back to Selection
+            </button>
+        </div>
+    </div>
+    <script>
+        let myChart = null; // A global variable to hold the chart instance
+
+        async function predictDiabetes() {
+            const resultBox = document.getElementById('prediction-result');
+            resultBox.style.display = 'none';
+            document.getElementById('chart-container').classList.add('hidden');
+
+            const data = {
+                "Pregnancies": parseFloat(document.getElementById('pregnancies').value),
+                "Glucose": parseFloat(document.getElementById('glucose').value),
+                "BloodPressure": parseFloat(document.getElementById('bp').value),
+                "SkinThickness": parseFloat(document.getElementById('skinthickness').value),
+                "Insulin": parseFloat(document.getElementById('insulin').value),
+                "BMI": parseFloat(document.getElementById('bmi').value),
+                "DiabetesPedigreeFunction": parseFloat(document.getElementById('dpf').value),
+                "Age": parseFloat(document.getElementById('age').value)
+            };
+
+            // Basic validation
+            for (const key in data) {
+                if (isNaN(data[key])) {
+                    showMessage(resultBox, 'Please fill in all fields with valid numbers.', 'error');
+                    return;
+                }
+            }
+
+            try {
+                // Adjust the URL if your Flask app is running on a different port or server
+                const response = await fetch('http://127.0.0.1:5000/predict_diabetes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    if (result.prediction === 1) {
+                        showMessage(resultBox, 'Prediction: High chance of Diabetes.', 'error');
+                    } else {
+                        showMessage(resultBox, 'Prediction: Low chance of Diabetes.', 'success');
+                    }
+                    // Update chart with new data
+                    renderChart(result.feature_names, result.feature_importances);
+                } else {
+                    showMessage(resultBox, `Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage(resultBox, `An error occurred: ${error.message}`, 'error');
+            }
+        }
+
+        function showMessage(element, message, type) {
+            element.textContent = message;
+            element.className = `message-box ${type} block`;
+            element.style.display = 'block';
+        }
+
+        function renderChart(labels, data) {
+            document.getElementById('chart-container').classList.remove('hidden');
+            const ctx = document.getElementById('importanceChart').getContext('2d');
+            
+            // Destroy the old chart if it exists
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Feature Importance',
+                        data: data,
+                        backgroundColor: (context) => {
+                            const chart = context.chart;
+                            const { ctx, chartArea } = chart;
+                            if (!chartArea) {
+                                return;
+                            }
+                            const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                            gradient.addColorStop(0, '#0B45A0FF');
+                            gradient.addColorStop(1, '#547CF3FF');
+                            return gradient;
+                        },
+                        borderColor: '#1D4ED8',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Importance'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Features'
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

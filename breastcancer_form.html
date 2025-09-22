@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breast Cancer Prediction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            background-image: url('bg2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .sidebar {
+            background-color: #2c3e50;
+            background-image: url('sideimg.jpg');
+            background-size: cover; /* Cover the entire area */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat;
+            width: 15rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 2rem;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        .sidebar-icon {
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .sidebar-icon:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .main-content {
+            margin-left: 15rem;
+            flex-grow: 1;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-container {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 40rem;
+        }
+        .message-box {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+        .message-box.success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .message-box.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 5rem;
+            }
+            .main-content {
+                margin-left: 5rem;
+            }
+        }
+    </style>
+</head>
+<body class="flex">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/>
+            </svg>
+        </a>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">BREAST CANCER PREDICTION</h1>
+        
+        <div id="form-container" class="form-container">
+            <h2 id="form-title" class="text-2xl font-bold mb-4 text-center">Enter Patient Information</h2>
+            <div id="form-fields" class="space-y-4">
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold border-b pb-2 mb-2">Mean Values</h3>
+                    <div>
+                        <label for="mean_radius" class="block text-sm font-medium text-gray-700">Mean Radius</label>
+                        <input type="number" step="any" id="mean_radius" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 17.99">
+                    </div>
+                    <div>
+                        <label for="mean_texture" class="block text-sm font-medium text-gray-700">Mean Texture</label>
+                        <input type="number" step="any" id="mean_texture" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 10.38">
+                    </div>
+                    <div>
+                        <label for="mean_perimeter" class="block text-sm font-medium text-gray-700">Mean Perimeter</label>
+                        <input type="number" step="any" id="mean_perimeter" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 122.8">
+                    </div>
+                    <div>
+                        <label for="mean_area" class="block text-sm font-medium text-gray-700">Mean Area</label>
+                        <input type="number" step="any" id="mean_area" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 1001.0">
+                    </div>
+                    <div>
+                        <label for="mean_smoothness" class="block text-sm font-medium text-gray-700">Mean Smoothness</label>
+                        <input type="number" step="any" id="mean_smoothness" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.1184">
+                    </div>
+                    <div>
+                        <label for="mean_compactness" class="block text-sm font-medium text-gray-700">Mean Compactness</label>
+                        <input type="number" step="any" id="mean_compactness" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.2776">
+                    </div>
+                    <div>
+                        <label for="mean_concavity" class="block text-sm font-medium text-gray-700">Mean Concavity</label>
+                        <input type="number" step="any" id="mean_concavity" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.3001">
+                    </div>
+                    <div>
+                        <label for="mean_concave_points" class="block text-sm font-medium text-gray-700">Mean Concave Points</label>
+                        <input type="number" step="any" id="mean_concave_points" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.1471">
+                    </div>
+                    <div>
+                        <label for="mean_symmetry" class="block text-sm font-medium text-gray-700">Mean Symmetry</label>
+                        <input type="number" step="any" id="mean_symmetry" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.2419">
+                    </div>
+                    <div>
+                        <label for="mean_fractal_dimension" class="block text-sm font-medium text-gray-700">Mean Fractal Dimension</label>
+                        <input type="number" step="any" id="mean_fractal_dimension" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.07871">
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold border-b pb-2 mb-2">Standard Error Values</h3>
+                    <div>
+                        <label for="radius_error" class="block text-sm font-medium text-gray-700">Radius Error</label>
+                        <input type="number" step="any" id="radius_error" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 1.095">
+                    </div>
+                    <div>
+                        <label for="texture_error" class="block text-sm font-medium text-gray-700">Texture Error</label>
+                        <input type="number" step="any" id="texture_error" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.9053">
+                    </div>
+                    <div>
+                        <label for="perimeter_error" class="block text-sm font-medium text-gray-700">Perimeter Error</label>
+                        <input type="number" step="any" id="perimeter_error" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 8.589">
+                    </div>
+                    <div>
+                        <label for="area_error" class="block text-sm font-medium text-gray-700">Area Error</label>
+                        <input type="number" step="any" id="area_error" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 153.4">
+                    </div>
+                    <div>
+                        <label for="smoothness_error" class="block text-sm font-medium text-gray-700">Smoothness Error</label>
+                        <input type="number" step="any" id="smoothness_error" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.006399">
+                    </div>
+                    <div>
+                        <label for="compactness_error" class="block text-sm font-medium text-gray-700">Compactness Error</label>
+                        <input type="number" step="any" id="compactness_error" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.04904">
+                    </div>
+                    <div>
+                        <label for="concavity_error" class="block text-sm font-medium text-gray-700">Concavity Error</label>
+                        <input type="number" step="any" id="concavity_error" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.05373">
+                    </div>
+                    <div>
+                        <label for="concave_points_error" class="block text-sm font-medium text-gray-700">Concave Points Error</label>
+                        <input type="number" step="any" id="concave_points_error" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.01587">
+                    </div>
+                    <div>
+                        <label for="symmetry_error" class="block text-sm font-medium text-gray-700">Symmetry Error</label>
+                        <input type="number" step="any" id="symmetry_error" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.03003">
+                    </div>
+                    <div>
+                        <label for="fractal_dimension_error" class="block text-sm font-medium text-gray-700">Fractal Dimension Error</label>
+                        <input type="number" step="any" id="fractal_dimension_error" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.006193">
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold border-b pb-2 mb-2">Worst Values</h3>
+                    <div>
+                        <label for="worst_radius" class="block text-sm font-medium text-gray-700">Worst Radius</label>
+                        <input type="number" step="any" id="worst_radius" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 25.38">
+                    </div>
+                    <div>
+                        <label for="worst_texture" class="block text-sm font-medium text-gray-700">Worst Texture</label>
+                        <input type="number" step="any" id="worst_texture" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 17.33">
+                    </div>
+                    <div>
+                        <label for="worst_perimeter" class="block text-sm font-medium text-gray-700">Worst Perimeter</label>
+                        <input type="number" step="any" id="worst_perimeter" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 184.6">
+                    </div>
+                    <div>
+                        <label for="worst_area" class="block text-sm font-medium text-gray-700">Worst Area</label>
+                        <input type="number" step="any" id="worst_area" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 2019.0">
+                    </div>
+                    <div>
+                        <label for="worst_smoothness" class="block text-sm font-medium text-gray-700">Worst Smoothness</label>
+                        <input type="number" step="any" id="worst_smoothness" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.1622">
+                    </div>
+                    <div>
+                        <label for="worst_compactness" class="block text-sm font-medium text-gray-700">Worst Compactness</label>
+                        <input type="number" step="any" id="worst_compactness" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.6656">
+                    </div>
+                    <div>
+                        <label for="worst_concavity" class="block text-sm font-medium text-gray-700">Worst Concavity</label>
+                        <input type="number" step="any" id="worst_concavity" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.7119">
+                    </div>
+                    <div>
+                        <label for="worst_concave_points" class="block text-sm font-medium text-gray-700">Worst Concave Points</label>
+                        <input type="number" step="any" id="worst_concave_points" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.2654">
+                    </div>
+                    <div>
+                        <label for="worst_symmetry" class="block text-sm font-medium text-gray-700">Worst Symmetry</label>
+                        <input type="number" step="any" id="worst_symmetry" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.4601">
+                    </div>
+                    <div>
+                        <label for="worst_fractal_dimension" class="block text-sm font-medium text-gray-700">Worst Fractal Dimension</label>
+                        <input type="number" step="any" id="worst_fractal_dimension" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 0.1189">
+                    </div>
+                </div>
+            </div>
+            <button onclick="predictBreastCancer()" class="w-full mt-6 py-3 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200">
+                Predict
+            </button>
+            <div id="prediction-result" class="message-box"></div>
+            
+            <!-- New section for chart -->
+            <div id="chart-container" class="hidden mt-8 w-full mx-auto" style="height: 300px;">
+                <h3 class="text-xl font-semibold mb-4 text-center">Feature Importance</h3>
+                <canvas id="importanceChart"></canvas>
+            </div>
+            
+            <button onclick="window.location.href = 'index.html'" class="w-full mt-8 py-2 px-4 text-gray-600 font-semibold rounded-md hover:text-blue-500 transition-colors duration-200 focus:outline-none">
+                &larr; Back to Selection
+            </button>
+        </div>
+    </div>
+    <script>
+        let myChart = null; // A global variable to hold the chart instance
+
+        async function predictBreastCancer() {
+            const resultBox = document.getElementById('prediction-result');
+            resultBox.style.display = 'none';
+            document.getElementById('chart-container').classList.add('hidden');
+
+            const data = {
+                "mean radius": parseFloat(document.getElementById('mean_radius').value),
+                "mean texture": parseFloat(document.getElementById('mean_texture').value),
+                "mean perimeter": parseFloat(document.getElementById('mean_perimeter').value),
+                "mean area": parseFloat(document.getElementById('mean_area').value),
+                "mean smoothness": parseFloat(document.getElementById('mean_smoothness').value),
+                "mean compactness": parseFloat(document.getElementById('mean_compactness').value),
+                "mean concavity": parseFloat(document.getElementById('mean_concavity').value),
+                "mean concave points": parseFloat(document.getElementById('mean_concave_points').value),
+                "mean symmetry": parseFloat(document.getElementById('mean_symmetry').value),
+                "mean fractal dimension": parseFloat(document.getElementById('mean_fractal_dimension').value),
+                "radius error": parseFloat(document.getElementById('radius_error').value),
+                "texture error": parseFloat(document.getElementById('texture_error').value),
+                "perimeter error": parseFloat(document.getElementById('perimeter_error').value),
+                "area error": parseFloat(document.getElementById('area_error').value),
+                "smoothness error": parseFloat(document.getElementById('smoothness_error').value),
+                "compactness error": parseFloat(document.getElementById('compactness_error').value),
+                "concavity error": parseFloat(document.getElementById('concavity_error').value),
+                "concave points error": parseFloat(document.getElementById('concave_points_error').value),
+                "symmetry error": parseFloat(document.getElementById('symmetry_error').value),
+                "fractal dimension error": parseFloat(document.getElementById('fractal_dimension_error').value),
+                "worst radius": parseFloat(document.getElementById('worst_radius').value),
+                "worst texture": parseFloat(document.getElementById('worst_texture').value),
+                "worst perimeter": parseFloat(document.getElementById('worst_perimeter').value),
+                "worst area": parseFloat(document.getElementById('worst_area').value),
+                "worst smoothness": parseFloat(document.getElementById('worst_smoothness').value),
+                "worst compactness": parseFloat(document.getElementById('worst_compactness').value),
+                "worst concavity": parseFloat(document.getElementById('worst_concavity').value),
+                "worst concave points": parseFloat(document.getElementById('worst_concave_points').value),
+                "worst symmetry": parseFloat(document.getElementById('worst_symmetry').value),
+                "worst fractal dimension": parseFloat(document.getElementById('worst_fractal_dimension').value),
+            };
+
+            // Basic validation
+            for (const key in data) {
+                if (isNaN(data[key])) {
+                    showMessage(resultBox, 'Please fill in all fields with valid numbers.', 'error');
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/predict_breastcancer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    if (result.prediction === 1) {
+                        showMessage(resultBox, 'Prediction: Benign (Not Cancerous).', 'success');
+                    } else {
+                        showMessage(resultBox, 'Prediction: Malignant (Cancerous).', 'error');
+                    }
+                    // Update chart with new data
+                    renderChart(result.feature_names, result.feature_importances);
+                } else {
+                    showMessage(resultBox, `Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage(resultBox, `An error occurred: ${error.message}`, 'error');
+            }
+        }
+
+        function showMessage(element, message, type) {
+            element.textContent = message;
+            element.className = `message-box ${type} block`;
+            element.style.display = 'block';
+        }
+
+        function renderChart(labels, data) {
+            document.getElementById('chart-container').classList.remove('hidden');
+            const ctx = document.getElementById('importanceChart').getContext('2d');
+            
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Feature Importance',
+                        data: data,
+                        backgroundColor: (context) => {
+                            const chart = context.chart;
+                            const { ctx, chartArea } = chart;
+                            if (!chartArea) {
+                                return;
+                            }
+                            const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                            gradient.addColorStop(0, '#3B82F6');
+                            gradient.addColorStop(1, '#EF4444');
+                            return gradient;
+                        },
+                        borderColor: '#1D4ED8',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Importance'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Features'
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
