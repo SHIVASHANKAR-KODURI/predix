@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Home · Predix</title>
+<meta name="description" content="Predix machine learning health risk prediction platform.">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<div class="app-shell">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><a href="index.html"><img src="./assets/logo.png" alt="Predix"></a></div>
+  <div class="nav-label">Workspace</div>
+  <nav id="disease-nav" class="nav"></nav>
+  <div class="sidebar-bottom">Predix uses machine-learning models to provide informational risk estimates. It is not a medical diagnosis.</div>
+</aside>
+<main class="main">
+<header class="topbar"><button class="mobile-menu" id="mobile-menu" aria-label="Open menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div class="eyebrow" id="topbar-title">Prediction workspace</div><div class="wake" id="wake"><span>●</span> Local prediction engine</div></header>
+<section class="page"><div class="hero"><div class="hero-copy"><div class="eyebrow">Machine learning health workspace</div><h1>Understand health data with <span class="hero-accent">Predix.</span></h1><p>A focused, responsive prediction workspace for exploring trained disease-classification models. Enter clinical values, run a model, and inspect the features that matter most to that model.</p></div><div class="card hero-card"><div class="eyebrow">At a glance</div><h2>Six prediction models</h2><p>Designed to stay fast on phones, tablets and desktops, with your recent form values remembered locally on this device.</p><div class="stat-grid"><div class="stat"><strong>6</strong><span>Models</span></div><div class="stat"><strong>100%</strong><span>Responsive</span></div><div class="stat"><strong>Local</strong><span>Form memory</span></div><div class="stat"><strong>AI/ML</strong><span>Model insights</span></div></div></div></div>
+<div class="section-head"><div><div class="eyebrow">Choose a model</div><h2>Prediction modules</h2><p>Use the menu or select a model below.</p></div></div><div class="disease-grid"><a class="card disease-card" href="diabetes_form.html"><div><span class="disease-number">01</span><h3>Diabetes</h3><p>Estimate diabetes risk from glucose, BMI, age and related measures.</p></div><span class="disease-link">Open model <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="card disease-card" href="heartdisease_form.html"><div><span class="disease-number">02</span><h3>Heart Disease</h3><p>Evaluate a heart-disease classification model using clinical indicators.</p></div><span class="disease-link">Open model <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="card disease-card" href="ckd_form.html"><div><span class="disease-number">03</span><h3>Kidney Disease</h3><p>Assess chronic kidney disease risk from blood and urine indicators.</p></div><span class="disease-link">Open model <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="card disease-card" href="breastcancer_form.html"><div><span class="disease-number">04</span><h3>Breast Cancer</h3><p>Analyze the Wisconsin diagnostic feature set with model importance.</p></div><span class="disease-link">Open model <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="card disease-card" href="parkinsons_form.html"><div><span class="disease-number">05</span><h3>Parkinson's</h3><p>Use voice-measurement features to classify Parkinson’s risk.</p></div><span class="disease-link">Open model <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="card disease-card" href="liver_form.html"><div><span class="disease-number">06</span><h3>Liver Disease</h3><p>Evaluate liver-disease likelihood from laboratory measurements.</p></div><span class="disease-link">Open model <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></div>
+<div class="card info-strip"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7h.01"/></svg><div><strong>Important</strong><p style="margin:4px 0 0">Predix is an educational/portfolio project. Results are model predictions, not diagnoses or treatment advice. Do not use them to make medical decisions.</p></div></div></section>
+</main></div>
+<div class="toast" id="toast"></div>
+<script src="./app.js"></script>
+</body></html>

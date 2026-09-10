@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Liver Disease Risk · Predix</title>
+<meta name="description" content="Predix machine learning health risk prediction platform.">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body data-disease="liver">
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<div class="app-shell">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><a href="index.html"><img src="./assets/logo.png" alt="Predix"></a></div>
+  <div class="nav-label">Workspace</div>
+  <nav id="disease-nav" class="nav"></nav>
+  <div class="sidebar-bottom">Predix uses machine-learning models to provide informational risk estimates. It is not a medical diagnosis.</div>
+</aside>
+<main class="main">
+<header class="topbar"><button class="mobile-menu" id="mobile-menu" aria-label="Open menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div class="eyebrow" id="topbar-title">Prediction workspace</div><div class="wake" id="wake"><span>●</span> Local prediction engine</div></header>
+<section class="page"><div class="form-wrap">
+<div class="form-header"><div><div class="eyebrow">Prediction model</div><h1>Liver Disease Risk</h1><p>Enter the laboratory measurements used by the trained liver-disease classification model.</p></div><div class="header-actions"><button class="btn" id="demo-btn">Use demo data</button><button class="btn ghost" id="clear-btn">Clear</button></div></div>
+<div class="progress-wrap"><div class="progress-meta"><span>Form completion</span><span id="progress-label">0/0 completed</span></div><div class="progress"><i id="progress-bar"></i></div></div>
+<div class="card form-card"><div class="form-section"><div class="form-section-title"><i class="dot"></i><span>Laboratory profile</span></div><div class="fields three"><div class="field"><label for="Age">Age</label><input data-field="Age" id="Age" type="number" step="1" placeholder="years" inputmode="decimal" autocomplete="off"></div><div class="field"><label for="Gender">Gender</label><select data-field="Gender" id="Gender"><option value="">Select</option><option value="1">Male</option><option value="0">Female</option></select></div><div class="field"><label for="Total_Bilirubin">Total bilirubin</label><input data-field="Total_Bilirubin" id="Total_Bilirubin" type="number" step="0.1" placeholder="mg/dL" inputmode="decimal" autocomplete="off"></div><div class="field"><label for="Direct_Bilirubin">Direct bilirubin</label><input data-field="Direct_Bilirubin" id="Direct_Bilirubin" type="number" step="0.1" placeholder="mg/dL" inputmode="decimal" autocomplete="off"></div><div class="field"><label for="Alkaline_Phosphotase">Alkaline phosphotase</label><input data-field="Alkaline_Phosphotase" id="Alkaline_Phosphotase" type="number" step="1" placeholder="U/L" inputmode="decimal" autocomplete="off"></div><div class="field"><label for="Alamine_Aminotransferase">Alamine aminotransferase</label><input data-field="Alamine_Aminotransferase" id="Alamine_Aminotransferase" type="number" step="1" placeholder="U/L" inputmode="decimal" autocomplete="off"></div><div class="field"><label for="Aspartate_Aminotransferase">Aspartate aminotransferase</label><input data-field="Aspartate_Aminotransferase" id="Aspartate_Aminotransferase" type="number" step="1" placeholder="U/L" inputmode="decimal" autocomplete="off"></div><div class="field"><label for="Total_Protiens">Total proteins</label><input data-field="Total_Protiens" id="Total_Protiens" type="number" step="0.1" placeholder="g/dL" inputmode="decimal" autocomplete="off"></div><div class="field"><label for="Albumin">Albumin</label><input data-field="Albumin" id="Albumin" type="number" step="0.1" placeholder="g/dL" inputmode="decimal" autocomplete="off"></div><div class="field"><label for="Albumin_and_Globulin_Ratio">Albumin / globulin ratio</label><input data-field="Albumin_and_Globulin_Ratio" id="Albumin_and_Globulin_Ratio" type="number" step="0.1" placeholder="ratio" inputmode="decimal" autocomplete="off"></div></div></div><div class="form-footer"><button class="btn primary" id="analyze-btn">Analyze result</button></div><div class="result" id="result"><div class="result-top"><div><span class="result-badge">Model result</span><h3 id="result-title">—</h3><small id="result-subtitle">—</small></div></div><div class="chart-box"><div class="chart-title">Top model feature importance</div><div class="bars" id="bars"></div></div><div class="disclaimer">Predix provides an informational model estimate and is not a medical diagnosis. Feature importance describes how strongly the trained model used each feature overall; it does not prove that a specific feature caused an individual result.</div></div></div>
+</div></section>
+</main></div>
+<div class="toast" id="toast"></div>
+<script src="./app.js"></script>
+</body></html>
